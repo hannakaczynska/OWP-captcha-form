@@ -20,8 +20,8 @@
   </style>
 </head>
 <body>
-  <h1>Weryfikacja reCAPTCHA</h1>
-  <p>Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś robotem 🤖</p>
+  <h1>Musimy zweryfikować czy nie jesteś robotem 🤖</h1>
+  <p>Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś robotem.</p>
 
   <div class="g-recaptcha" data-sitekey="6Ldf23orAAAAABhTn2Ramm9HOp23v8HKesvRLOgx" data-callback="onRecaptchaSuccess"></div>
 
@@ -32,8 +32,9 @@
       const link = "https://docs.google.com/forms/d/e/1FAIpQLSe-kQbrt9IzIIAUUVA5uSYzzGBzsd4QPIH1xMk2ybro8gfJqQ/viewform";
       const container = document.getElementById('form-link');
       container.innerHTML = `
-        <p>Weryfikacja zakończona! Kliknij poniższy link, aby przejść do formularza:</p>
-        <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 1.2rem; color: #0066cc;">Przejdź do formularza</a>
+        <p>Weryfikacja zakończona pomyślnie! Kliknij poniższy link, aby przejść do formularza:</p>
+        <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 1.2rem; color: #87cb27;">Przejdź do formularza 
+🍎</a>
       `;
       container.style.display = 'block';
     }
