@@ -1,43 +1,73 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Formularz zgłoszeniowy 🍎</title>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-      text-align: center;
-    }
-    #form-link {
-      display: none;
-      margin-top: 2rem;
-    }
-  </style>
-</head>
-<body>
-  <h1>Musimy zweryfikować czy nie jesteś robotem 🤖</h1>
-  <p>Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś robotem.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Formularz zgłoszeniowy 🍎</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2rem;
+        max-width: 600px;
+        margin: auto;
+        text-align: center;
+      }
+      #form-link {
+        display: none;
+        margin-top: 2rem;
+      }
+      #error-message {
+        color: red;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Musimy zweryfikować czy nie jesteś robotem 🤖</h1>
+    <p>
+      Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś
+      robotem.
+    </p>
 
-  <div class="g-recaptcha" data-sitekey="6Ldf23orAAAAABhTn2Ramm9HOp23v8HKesvRLOgx" data-callback="onRecaptchaSuccess"></div>
+    <div
+      class="g-recaptcha"
+      data-sitekey="6Ldf23orAAAAABhTn2Ramm9HOp23v8HKesvRLOgx"
+      data-callback="onRecaptchaSuccess"
+    ></div>
 
-  <div id="form-link"></div>
+    <div id="form-link"></div>
+    <div id="error-message"></div>
 
-  <script>
-    function onRecaptchaSuccess() {
-      const link = "https://docs.google.com/forms/d/e/1FAIpQLSe-kQbrt9IzIIAUUVA5uSYzzGBzsd4QPIH1xMk2ybro8gfJqQ/viewform";
-      const container = document.getElementById('form-link');
-      container.innerHTML = `
+    <script>
+      async function onRecaptchaSuccess(token) {
+        try {
+
+          const response = await fetch("https://script.google.com/macros/s/AKfycbysaFECzdZuD4CVUvWJwnCcDIndusflYk04nEJH6K7I9gnXL8fyce8QKnAC7h1g_qUu/exec", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `g-recaptcha-response=${token}`,
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            const container = document.getElementById("form-link");
+            container.innerHTML = `
         <p>Weryfikacja zakończona pomyślnie! Kliknij poniższy link, aby przejść do formularza:</p>
         <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 2.4rem; color: #87cb27; margin-top: 50px">Przejdź do formularza 
 🍎</a>
       `;
-      container.style.display = 'block';
-    }
-  </script>
-</body>
+            container.style.display = "block";
+          } else {
+            document.getElementById("error-message").innerText =
+              "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
+          }
+        } catch (err) {
+          document.getElementById("error-message").innerText =
+            "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
+        }
+      }
+    </script>
+  </body>
 </html>
