@@ -36,38 +36,40 @@
       data-callback="onRecaptchaSuccess"
     ></div>
 
-    <div id="form-link"></div>
-    <div id="error-message"></div>
-
     <script>
-      async function onRecaptchaSuccess(token) {
-        try {
-          console.log("Token z reCAPTCHA:", token);
-          const response = await fetch("https://script.google.com/macros/s/AKfycbyehBrvPBYDnJEolyVShNSLIlLtXt3RPxVkelkMkelJ9rQ_CpewvO2DYb_hHGP9ixOV/exec", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `g-recaptcha-response=${token}`,
-          });
+          function onRecaptchaSuccess(token) {
+              // Przekierowanie do Apps Script z tokenem w parametrze
+              const scriptUrl = "https://script.google.com/macros/s/AKfycbz1xyvD_7-9HB-PCgPvBAVM-E1gXLoZF_U41q9JnxsBF4DDQ9BIoP5meIR_50rIjF4t/exec";
+              window.location.href = scriptUrl + "?token=" + encodeURIComponent(token);
+            }
+//       async function onRecaptchaSuccess(token) {
+//         try {
+//           console.log("Token z reCAPTCHA:", token);
+//           const response = await fetch("https://script.google.com/macros/s/AKfycbyehBrvPBYDnJEolyVShNSLIlLtXt3RPxVkelkMkelJ9rQ_CpewvO2DYb_hHGP9ixOV/exec", {
+//             method: "POST",
+//             headers: { "Content-Type": "application/x-www-form-urlencoded" },
+//             body: `g-recaptcha-response=${token}`,
+//           });
 
-          const result = await response.json();
+//           const result = await response.json();
 
-          if (result.success) {
-            const container = document.getElementById("form-link");
-            container.innerHTML = `
-        <p>Weryfikacja zakończona pomyślnie! Kliknij poniższy link, aby przejść do formularza:</p>
-        <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 2.4rem; color: #87cb27; margin-top: 50px">Przejdź do formularza 
-🍎</a>
-      `;
-            container.style.display = "block";
-          } else {
-            document.getElementById("error-message").innerText =
-              "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
-          }
-        } catch (err) {
-          document.getElementById("error-message").innerText =
-            "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
-        }
-      }
+//           if (result.success) {
+//             const container = document.getElementById("form-link");
+//             container.innerHTML = `
+//         <p>Weryfikacja zakończona pomyślnie! Kliknij poniższy link, aby przejść do formularza:</p>
+//         <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 2.4rem; color: #87cb27; margin-top: 50px">Przejdź do formularza 
+// 🍎</a>
+//       `;
+//             container.style.display = "block";
+//           } else {
+//             document.getElementById("error-message").innerText =
+//               "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
+//           }
+//         } catch (err) {
+//           document.getElementById("error-message").innerText =
+//             "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
+//         }
+//       }
     </script>
   </body>
 </html>
