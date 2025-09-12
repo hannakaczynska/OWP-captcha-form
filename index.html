@@ -39,7 +39,7 @@
     <script>
           function onRecaptchaSuccess(token) {
               // Przekierowanie do Apps Script z tokenem w parametrze
-              const scriptUrl = "https://script.google.com/macros/s/AKfycbz1xyvD_7-9HB-PCgPvBAVM-E1gXLoZF_U41q9JnxsBF4DDQ9BIoP5meIR_50rIjF4t/exec";
+              const scriptUrl = "https://script.google.com/macros/s/AKfycbzo97F8GfAH7tSQAN-_ptWVO65yEoKfYCAnTiljz__8zRhXvUyIXXl6_ypcghL1CFvJ/exec";
               window.location.href = scriptUrl + "?token=" + encodeURIComponent(token);
             }
 //       async function onRecaptchaSuccess(token) {
