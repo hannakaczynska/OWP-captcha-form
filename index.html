@@ -13,10 +13,6 @@
         margin: auto;
         text-align: center;
       }
-      #form-link {
-        display: none;
-        margin-top: 2rem;
-      }
       #error-message {
         color: red;
         margin-top: 1rem;
@@ -36,40 +32,33 @@
       data-callback="onRecaptchaSuccess"
     ></div>
 
-    <script>
-          function onRecaptchaSuccess(token) {
-              // Przekierowanie do Apps Script z tokenem w parametrze
-              const scriptUrl = "https://script.google.com/macros/s/AKfycbzo97F8GfAH7tSQAN-_ptWVO65yEoKfYCAnTiljz__8zRhXvUyIXXl6_ypcghL1CFvJ/exec";
-              window.location.href = scriptUrl + "?token=" + encodeURIComponent(token);
-            }
-//       async function onRecaptchaSuccess(token) {
-//         try {
-//           console.log("Token z reCAPTCHA:", token);
-//           const response = await fetch("https://script.google.com/macros/s/AKfycbyehBrvPBYDnJEolyVShNSLIlLtXt3RPxVkelkMkelJ9rQ_CpewvO2DYb_hHGP9ixOV/exec", {
-//             method: "POST",
-//             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//             body: `g-recaptcha-response=${token}`,
-//           });
+    <div id="error-message"></div>
 
-//           const result = await response.json();
+  <script>
+    async function onRecaptchaSuccess(token) {
+      try {
+        const response = await fetch("https://owprzyrodnicza.netlify.app/.netlify/functions/recaptcha
+", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `g-recaptcha-response=${token}`
+        });
 
-//           if (result.success) {
-//             const container = document.getElementById("form-link");
-//             container.innerHTML = `
-//         <p>Weryfikacja zakończona pomyślnie! Kliknij poniższy link, aby przejść do formularza:</p>
-//         <a href="${link}" target="_blank" rel="noopener noreferrer" style="font-size: 2.4rem; color: #87cb27; margin-top: 50px">Przejdź do formularza 
-// 🍎</a>
-//       `;
-//             container.style.display = "block";
-//           } else {
-//             document.getElementById("error-message").innerText =
-//               "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
-//           }
-//         } catch (err) {
-//           document.getElementById("error-message").innerText =
-//             "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
-//         }
-//       }
-    </script>
+        const result = await response.json();
+
+        if (result.success && result.redirect) {
+          window.location.href = result.redirect;
+        } else {
+          document.getElementById("error-message").innerText =
+            "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
+          grecaptcha.reset(); 
+        }
+      } catch (err) {
+        document.getElementById("error-message").innerText =
+          "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
+        grecaptcha.reset();
+      }
+    }
+  </script>
   </body>
 </html>
