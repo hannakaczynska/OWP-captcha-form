@@ -35,36 +35,41 @@
     <div id="error-message"></div>
 
     <script>
-          async function onRecaptchaSuccess(token) {
-            try {
-              const response = await fetch("https://owprzyrodnicza.netlify.app/.netlify/functions/recaptcha-proxy", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `g-recaptcha-response=${token}`
-              });
-
-              const result = await response.json();
-
-              if (result.success && result.redirect) {
-                const jwtResponse = await fetch("https://owprzyrodnicza.netlify.app/jwt", {
-                  method: "GET",
-                  headers: { "Content-Type": "application/json" },
-                });
-                const jwtResult = await jwtResponse.json();
-                document.getElementById("error-message").innerText =
-                  `✅ Weryfikacja powiodła się. Przekierowujemy...${jwtResult.token}`;
-                window.location.href = result.redirect;
-              } else {
-                document.getElementById("error-message").innerText =
-                  "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
-                grecaptcha.reset();
-              }
-            } catch (err) {
-              document.getElementById("error-message").innerText =
-                "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
-              grecaptcha.reset();
+      async function onRecaptchaSuccess(token) {
+        try {
+          const response = await fetch(
+            "https://owprzyrodnicza.netlify.app/.netlify/functions/recaptcha-proxy",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: `g-recaptcha-response=${token}`,
             }
+          );
+
+          const result = await response.json();
+
+          if (result.success && result.redirect) {
+            const jwtResponse = await fetch(
+              "https://owprzyrodnicza.netlify.app/jwt",
+              {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+            const jwtResult = await jwtResponse.json();
+            console.log(jwtResult.token);
+            window.location.href = result.redirect;
+          } else {
+            document.getElementById("error-message").innerText =
+              "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
+            grecaptcha.reset();
           }
+        } catch (err) {
+          document.getElementById("error-message").innerText =
+            "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
+          grecaptcha.reset();
+        }
+      }
     </script>
   </body>
 </html>
