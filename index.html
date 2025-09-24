@@ -76,10 +76,6 @@
 
           if (result.success) {
             const spinnerElement = document.getElementById("spinner");
-            const recaptchaContainer = document.getElementById(
-              "recaptcha-container"
-            );
-            recaptchaContainer.style.display = "none";
             spinnerElement.style.display = "block";
 
             const opts = {
@@ -107,7 +103,7 @@
             document.getElementById("error-message").innerText = "";
 
             const jwtResponse = await fetch(
-              "https://owprzyrodnicza.netlify.app/jwt",
+              "https://owprzyrodnicza.netlify.app/.netlify/functions/generate-jwt",
               {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
@@ -116,20 +112,19 @@
             const jwtResult = await jwtResponse.json();
 
             const iframe = document.getElementById("form-iframe");
+            iframe.onload = function () {
+              if (spinner) spinner.stop();
+              document.getElementById("spinner").style.display = "none";
+              document.getElementById("form-container").style.display = "block";
+            };
             iframe.src = `https://owprzyrodnicza.netlify.app/.netlify/functions/proxy-form?token=${jwtResult.token}`;
 
-            // Stop spinner and show form
-            if (spinner) {
-              spinner.stop();
-            }
-            document.getElementById("spinner").style.display = "none";
-            document.getElementById("form-container").style.display = "block";
           } else {
             if (spinner) {
               spinner.stop();
             }
             document.getElementById("spinner").style.display = "none";
-            document.getElementById("form-container").style.display = "block";
+            document.getElementById("recaptcha-container").style.display = "block";
             document.getElementById("error-message").style.display = "block";
             document.getElementById("error-message").innerText =
               "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
@@ -140,7 +135,7 @@
             spinner.stop();
           }
           document.getElementById("spinner").style.display = "none";
-          document.getElementById("form-container").style.display = "block";
+          document.getElementById("recaptcha-container").style.display = "block";
           document.getElementById("error-message").style.display = "block";
           document.getElementById("error-message").innerText =
             "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
