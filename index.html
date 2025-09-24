@@ -9,35 +9,46 @@
       body {
         font-family: Arial, sans-serif;
         padding: 2rem;
-        max-width: 600px;
         margin: auto;
         text-align: center;
+      }
+      #recaptcha-container {
+        max-width: 600px;
       }
       #error-message {
         color: red;
         margin-top: 1rem;
       }
+      #form-container {
+        max-width: 100vw;
+        width: 100vw;
+      }
     </style>
   </head>
   <body>
-    <h1>Musimy zweryfikować czy nie jesteś robotem 🤖</h1>
-    <p>
-      Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś
-      robotem.
-    </p>
-
-    <div
-      class="g-recaptcha"
-      data-sitekey="6Ldf23orAAAAABhTn2Ramm9HOp23v8HKesvRLOgx"
-      data-callback="onRecaptchaSuccess"
-    ></div>
+    <div id="recaptcha-container">
+      <h1>Musimy zweryfikować czy nie jesteś robotem 🤖</h1>
+      <p>
+        Aby przejść do formularza zgłoszeniowego, potwierdź, że nie jesteś
+        robotem.
+      </p>
+      <div
+        class="g-recaptcha"
+        data-sitekey="6Ldf23orAAAAABhTn2Ramm9HOp23v8HKesvRLOgx"
+        data-callback="onRecaptchaSuccess"
+      ></div>
+    </div>
 
     <div id="error-message"></div>
 
-    <div id="form-container" style="display:none;">
-      <iframe id="form-iframe" width="100%" height="1000px" frameborder="0"></iframe>
+    <div id="form-container" style="display: none">
+      <iframe
+        id="form-iframe"
+        width="100%"
+        height="1000px"
+        frameborder="0"
+      ></iframe>
     </div>
-
 
     <script>
       async function onRecaptchaSuccess(token) {
@@ -67,8 +78,6 @@
             const iframe = document.getElementById("form-iframe");
             iframe.src = `https://owprzyrodnicza.netlify.app/.netlify/functions/proxy-form?token=${jwtResult.token}`;
             document.getElementById("form-container").style.display = "block";
-
-            // window.location.href = result.redirect;
           } else {
             document.getElementById("error-message").innerText =
               "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
