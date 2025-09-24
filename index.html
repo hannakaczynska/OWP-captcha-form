@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Formularz zgłoszeniowy 🍎</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/spin.js@4.1.1/spin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/3.1.0/spin.min.js"></script>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -118,13 +118,13 @@
               document.getElementById("form-container").style.display = "block";
             };
             iframe.src = `https://owprzyrodnicza.netlify.app/.netlify/functions/proxy-form?token=${jwtResult.token}`;
-
           } else {
             if (spinner) {
               spinner.stop();
             }
             document.getElementById("spinner").style.display = "none";
-            document.getElementById("recaptcha-container").style.display = "block";
+            document.getElementById("recaptcha-container").style.display =
+              "block";
             document.getElementById("error-message").style.display = "block";
             document.getElementById("error-message").innerText =
               "❌ Weryfikacja nie powiodła się. Spróbuj ponownie.";
@@ -135,7 +135,8 @@
             spinner.stop();
           }
           document.getElementById("spinner").style.display = "none";
-          document.getElementById("recaptcha-container").style.display = "block";
+          document.getElementById("recaptcha-container").style.display =
+            "block";
           document.getElementById("error-message").style.display = "block";
           document.getElementById("error-message").innerText =
             "⚠️ Wystąpił błąd połączenia. Spróbuj ponownie.";
